@@ -2,7 +2,7 @@
   "name": "react-nanocarousel",
   "main": "index.js",
   "version": "0.0.0",
-  "description": "A swipeable carousel in as few bytes as possible",
+  "description": "A swipeable carousel in as few bytes as possible. React/Preact exports available.",
   "license": "MIT",
   "repository": "ajoslin/react-nanocarousel",
   "author": {
@@ -11,7 +11,7 @@
     "url": "ajoslin.com"
   },
   "scripts": {
-    "test": "standard && tape test.js"
+    "test": "standard"
   },
   "keywords": [
     "react",
@@ -28,5 +28,11 @@
   "files": [
     "index.js",
     "test.js"
-  ]
+  ],
+  "dependencies": {
+    "blacklist": "^1.1.4",
+    "classnames": "^2.2.5",
+    "vanilla-touchwipe": "^1.0.0",
+    "xtend": "^4.0.1"
+  }
 }
