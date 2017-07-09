@@ -1,47 +1,43 @@
 'use strict'
 
 var Touchwipe = require('vanilla-touchwipe')
-var omit = require('blacklist')
 var extend = require('xtend')
-var cx = require('classnames')
+var styles = require('./nanocarousel-styles')
 
-module.exports = function CustomCarouselComponent (h, Component) {
+module.exports = function NanocarouselFactory (h, Component) {
   function Nanocarousel (props) {
     var self = this
-
     Component.call(this, props)
     this.state = {
       currentIndex: 0,
       // We have to ensure the length of the images in the carousel are greater than 3.
-      // If we receive <=3 images, double the array into 4 or more images. This makes next/prev
-      // animations work flawlessly.
+      // If we receive <=3 images, double the array into 4 or more images. This makes
+      // next/prev animations work flawlessly.
       images: []
     }
 
     this.handleRef = function handleRef (node) {
       if (!node || self.touchwipe) return
       self.touchwipe = Touchwipe(node, {
-        wipeLeft: this.changeIndex(1),
-        wipeRight: this.changeIndex(-1)
+        wipeLeft: self.changeIndex.bind(self, 1),
+        wipeRight: self.changeIndex.bind(self, -1)
       })
-    }
-
-    this.handleDotClick = function handleDotClick (event) {
-      const index = Number(event.target.getAttribute('data-slide-index'))
-      if (!isNaN(index)) {
-        this.setState({index: index})
-      }
     }
   }
 
   Nanocarousel.prototype = Object.create(Component.prototype)
 
-  Nanocarousel.prototype.componentDidUpdate = function componentDidUpdate () {
-    this.onUpdate()
+  Nanocarousel.prototype.setIndex = function setIndex (index, callback) {
+    this.setState({currentIndex: index}, callback)
   }
 
-  Nanocarousel.prototype.componentDidMount = function componentDidMount () {
-    this.onUpdate()
+  Nanocarousel.prototype.componentWillReceiveProps = function componentWillReceiveProps (props) {
+    if (props.images === this.props.images) return
+    this.onUpdate(props)
+  }
+
+  Nanocarousel.prototype.componentWillMount = function componentWillMount () {
+    this.onUpdate(this.props)
   }
 
   Nanocarousel.prototype.componentWillUnmount = function componentWillMount () {
@@ -50,8 +46,8 @@ module.exports = function CustomCarouselComponent (h, Component) {
     this.touchwipe = null
   }
 
-  Nanocarousel.prototype.onUpdate = function onUpdate () {
-    var images = this.props.images || []
+  Nanocarousel.prototype.onUpdate = function onUpdate (props) {
+    var images = props.images || []
     if (images.length === 2 || images.length === 3) {
       images = images.concat(images)
     }
@@ -73,25 +69,19 @@ module.exports = function CustomCarouselComponent (h, Component) {
     var images = this.state.images
     var currentIndex = this.state.currentIndex
 
-    if (!images.length) return null
-
     var imageContainerProps = this.props.imageContainerProps || {}
-    var imageContainerClassName = omit(imageContainerProps, 'className')
-
     var imageProps = this.props.imageProps || {}
-    var imageClassName = omit(imageProps, 'className')
-
-    var className = omit(this.props, 'className')
-    var rest = omit(this.props, 'imageContainerProps', 'imageProps')
+    var rest = extend(this.props, {imageContainerProps: undefined, imageProps: undefined})
 
     return h('div', extend(rest, {
       ref: this.handleRef,
-      className: cx('nanocarousel-container', className)
+      style: styles.container
     }), [
       images.map(renderImage)
     ])
 
     function renderImage (src, index) {
+      var isActive = currentIndex === index
       var isPrevious = images.length > 1 && (
         index === currentIndex - 1 ||
           (index === images.length - 1 && currentIndex === 0)
@@ -100,16 +90,23 @@ module.exports = function CustomCarouselComponent (h, Component) {
         index === currentIndex + 1 ||
           (index === 0 && currentIndex === images.length - 1)
       )
+      var isAnimated = isPrevious || isNext || isActive
+
       return h('div', extend(imageContainerProps, {
-        className: cx('nanocarousel-image-container', imageContainerClassName, {
-          'nanocarousel-active': currentIndex === index,
-          'nanocarousel-previous': isPrevious,
-          'nanocarousel-next': isNext
-        })
+        style: extend(
+          styles.imageContainer,
+          isAnimated ? styles.containerAnimated : {},
+          isActive ? styles.containerActive
+            : isPrevious ? styles.containerPrevious
+            : isNext ? styles.containerNext
+            : {}
+        )
       }), h('img', extend(imageProps, {
-        className: cx('nanocarousel-image', imageClassName),
+        style: styles.image,
         src: src
       })))
     }
   }
+
+  return Nanocarousel
 }
