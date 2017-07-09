@@ -27,12 +27,18 @@ module.exports = function NanocarouselFactory (h, Component) {
 
   Nanocarousel.prototype = Object.create(Component.prototype)
 
-  Nanocarousel.prototype.setIndex = function setIndex (index, callback) {
-    this.setState({currentIndex: index}, callback)
-
-    // Return the index based upon the indices passed in, minus the duplication.
-    this.props.onChange && this.props.onChange(
-      this.state.images.indexOf(this.state.images[index])
+  Nanocarousel.prototype.setIndex = function setIndex (index) {
+    var self = this
+    this.setState(
+      function () {
+        return {currentIndex: index}
+      },
+      function stateChangeDone () {
+        // Return the index based upon the indices passed in, minus the duplication.
+        this.props.onChange && this.props.onChange(
+          this.state.images.indexOf(this.state.images[index])
+        )
+      }
     )
   }
 
