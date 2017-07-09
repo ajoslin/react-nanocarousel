@@ -1,0 +1,32 @@
+{
+  "name": "react-nanocarousel",
+  "main": "index.js",
+  "version": "0.0.0",
+  "description": "A swipeable carousel in as few bytes as possible",
+  "license": "MIT",
+  "repository": "ajoslin/react-nanocarousel",
+  "author": {
+    "name": "Andrew Joslin",
+    "email": "andrewtjoslin@gmail.com",
+    "url": "ajoslin.com"
+  },
+  "scripts": {
+    "test": "standard && tape test.js"
+  },
+  "keywords": [
+    "react",
+    "carousel",
+    "preact",
+    "swipe",
+    "touch",
+    "mobile"
+  ],
+  "devDependencies": {
+    "tape": "^4.0.0",
+    "standard": "^7.0.0"
+  },
+  "files": [
+    "index.js",
+    "test.js"
+  ]
+}
