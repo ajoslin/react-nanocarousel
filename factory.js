@@ -29,6 +29,11 @@ module.exports = function NanocarouselFactory (h, Component) {
 
   Nanocarousel.prototype.setIndex = function setIndex (index, callback) {
     this.setState({currentIndex: index}, callback)
+
+    // Return the index based upon the indices passed in, minus the duplication.
+    this.props.onChange && this.props.onChange(
+      this.state.images.indexOf(this.state.images[this.state.currentIndex])
+    )
   }
 
   Nanocarousel.prototype.componentWillReceiveProps = function componentWillReceiveProps (props) {
@@ -58,11 +63,11 @@ module.exports = function NanocarouselFactory (h, Component) {
 
   Nanocarousel.prototype.changeIndex = function changeIndex (delta) {
     var nextIndex = this.state.currentIndex + delta
-    this.setState({
-      currentIndex: nextIndex < 0 ? this.state.images.length - 1
+    this.setIndex(
+      nextIndex < 0 ? this.state.images.length - 1
         : nextIndex === this.state.images.length ? 0
         : nextIndex
-    })
+    )
   }
 
   Nanocarousel.prototype.render = function render () {
