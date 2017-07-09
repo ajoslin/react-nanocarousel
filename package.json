@@ -1,7 +1,7 @@
 {
   "name": "react-nanocarousel",
   "main": "index.js",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A swipeable carousel in as few bytes as possible",
   "license": "MIT",
   "repository": "ajoslin/react-nanocarousel",
