@@ -35,8 +35,8 @@ module.exports = function NanocarouselFactory (h, Component) {
       },
       function stateChangeDone () {
         // Return the index based upon the indices passed in, minus the duplication.
-        this.props.onChange && this.props.onChange(
-          this.state.images.indexOf(this.state.images[index])
+        self.props.onChange && self.props.onChange(
+          self.state.images.indexOf(self.state.images[index])
         )
       }
     )
