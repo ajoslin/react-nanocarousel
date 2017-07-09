@@ -45,7 +45,9 @@ module.exports = function CustomCarouselComponent (h, Component) {
   }
 
   Nanocarousel.prototype.componentWillUnmount = function componentWillMount () {
-    if (this.touchwipe) this.touchwipe.unbind()
+    if (!this.touchwipe) return
+    this.touchwipe.unbind()
+    this.touchwipe = null
   }
 
   Nanocarousel.prototype.onUpdate = function onUpdate () {
@@ -99,7 +101,7 @@ module.exports = function CustomCarouselComponent (h, Component) {
           (index === 0 && currentIndex === images.length - 1)
       )
       return h('div', extend(imageContainerProps, {
-        className: cx('nanocarousel-image-parent', imageContainerClassName, {
+        className: cx('nanocarousel-image-container', imageContainerClassName, {
           'nanocarousel-active': currentIndex === index,
           'nanocarousel-previous': isPrevious,
           'nanocarousel-next': isNext
