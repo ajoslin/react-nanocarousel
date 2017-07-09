@@ -22,11 +22,10 @@
     "mobile"
   ],
   "devDependencies": {
-    "tape": "^4.0.0",
     "standard": "^7.0.0"
   },
-  "files": [
-    "index.js",
-    "test.js"
-  ]
+  "dependencies": {
+    "vanilla-touchwipe": "^1.0.0",
+    "xtend": "^4.0.1"
+  }
 }
