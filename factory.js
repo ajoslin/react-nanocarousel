@@ -2,7 +2,7 @@
 
 var Touchwipe = require('vanilla-touchwipe')
 var extend = require('xtend')
-var styles = require('./nanocarousel-styles')
+var styles = require('./styles')
 
 module.exports = function NanocarouselFactory (h, Component) {
   function Nanocarousel (props) {
